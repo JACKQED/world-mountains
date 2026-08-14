@@ -5,7 +5,7 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>峰境无界 | 世界名山探索</title>
+    <title>峰境无界 | 全球名山探索图鉴</title>
     <style>
         :root {
             --primary-color: #1a365d;
@@ -30,12 +30,12 @@ HTML
             line-height: 1.6;
         }
 
-        /* 顶部导航与横幅 */
+        /* 顶部横幅 */
         header {
             position: relative;
-            height: 60vh;
-            min-height: 400px;
-            background: linear-gradient(rgba(10, 25, 47, 0.65), rgba(10, 25, 47, 0.75)),
+            height: 55vh;
+            min-height: 380px;
+            background: linear-gradient(rgba(10, 25, 47, 0.6), rgba(10, 25, 47, 0.75)),
                         url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -55,17 +55,17 @@ HTML
         }
 
         .header-subtitle {
-            font-size: 1.25rem;
-            max-width: 650px;
+            font-size: 1.2rem;
+            max-width: 680px;
             opacity: 0.9;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         /* 控制区域：搜索与分类 */
         .controls-container {
             max-width: 1200px;
             margin: -35px auto 40px;
-            padding: 20px;
+            padding: 20px 25px;
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -80,7 +80,7 @@ HTML
 
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 260px;
         }
 
         .search-box input {
@@ -183,7 +183,7 @@ HTML
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.65);
             backdrop-filter: blur(4px);
             color: white;
             padding: 4px 10px;
@@ -200,7 +200,7 @@ HTML
         }
 
         .card-title {
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 6px;
@@ -210,16 +210,17 @@ HTML
             font-size: 0.85rem;
             color: var(--text-muted);
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .card-desc {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: #4a5568;
             margin-bottom: 16px;
             flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .card-footer {
@@ -236,14 +237,14 @@ HTML
             color: #c53030;
         }
 
-        /* 模态弹窗 (详情 & 添加) */
+        /* 模态弹窗 */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
@@ -254,8 +255,8 @@ HTML
 
         .modal-content {
             background: white;
-            border-radius: 16px;
-            max-width: 600px;
+            border-radius: 20px;
+            max-width: 750px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -265,7 +266,7 @@ HTML
         }
 
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -275,14 +276,68 @@ HTML
             right: 20px;
             background: #edf2f7;
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 20;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            background: #cbd5e0;
+        }
+
+        /* 详情相册多图切换样式 */
+        .gallery-main-img {
+            width: 100%;
+            height: 340px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .gallery-thumb {
+            width: 75px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .gallery-thumb.active, .gallery-thumb:hover {
+            opacity: 1;
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .info-grid {
+            background: #edf2f7;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            font-size: 0.9rem;
         }
 
         .form-group {
@@ -298,7 +353,7 @@ HTML
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 10px 14px;
             border: 1px solid #cbd5e0;
             border-radius: 8px;
             font-size: 0.95rem;
@@ -319,13 +374,13 @@ HTML
     <!-- 顶部横幅 -->
     <header>
         <h1 class="header-title">🏔️ 峰 境 无 界</h1>
-        <p class="header-subtitle">为山野而生，追逐群峰的轮廓。收录全球壮丽山峰，记录每一次出发与眺望。</p>
+        <p class="header-subtitle">探寻全球壮丽山峰，记录山野与攀登的故事。收录世界名山图鉴与徒步探险指南。</p>
     </header>
 
     <!-- 控制面板：搜索 + 筛选 + 添加 -->
     <div class="controls-container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 搜索山峰名称、国家或关键词..." oninput="handleSearch()">
+            <input type="text" id="searchInput" placeholder="🔍 搜索山峰名称、国家、山脉或亮点..." oninput="handleSearch()">
         </div>
         <div class="filter-buttons">
             <button class="filter-btn active" onclick="filterByContinent('All')">全部</button>
@@ -341,7 +396,7 @@ HTML
     <!-- 山峰卡片网格 -->
     <main class="mountain-grid" id="mountainGrid"></main>
 
-    <!-- 详情弹窗 -->
+    <!-- 详情弹窗 (带 5 图相册) -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModals()">&times;</button>
@@ -357,7 +412,7 @@ HTML
             <form id="addMountainForm" onsubmit="handleAddMountain(event)">
                 <div class="form-group">
                     <label>山峰名称</label>
-                    <input type="text" id="mName" required placeholder="如：南迦巴瓦峰 / Mount Rainier">
+                    <input type="text" id="mName" required placeholder="如：贡嘎山 (Minya Konka)">
                 </div>
                 <div class="form-group">
                     <label>所属大洲</label>
@@ -371,19 +426,27 @@ HTML
                 </div>
                 <div class="form-group">
                     <label>国家 / 地区</label>
-                    <input type="text" id="mLocation" required placeholder="如：中国 西藏 / 美国 华盛顿州">
+                    <input type="text" id="mLocation" required placeholder="如：中国 四川 康定">
+                </div>
+                <div class="form-group">
+                    <label>所属山脉</label>
+                    <input type="text" id="mRange" required placeholder="如：大雪山山脉">
                 </div>
                 <div class="form-group">
                     <label>海拔高度 (米)</label>
-                    <input type="number" id="mAltitude" required placeholder="如：7782">
+                    <input type="number" step="0.1" id="mAltitude" required placeholder="如：7556">
                 </div>
                 <div class="form-group">
-                    <label>图片链接 (URL)</label>
-                    <input type="url" id="mImage" required placeholder="可粘贴 Unsplash 图片链接或留空使用默认图">
+                    <label>首张封面图片链接 (URL)</label>
+                    <input type="url" id="mImage" required placeholder="可粘贴图片链接，或留空使用默认图">
                 </div>
                 <div class="form-group">
-                    <label>简短介绍 / 旅行亮点</label>
-                    <textarea id="mDesc" rows="3" required placeholder="描写一下这座山的壮丽或你的攀登感受..."></textarea>
+                    <label>简短亮点</label>
+                    <input type="text" id="mDesc" required placeholder="一句话介绍：如'蜀山之王，横断山脉最高峰'">
+                </div>
+                <div class="form-group">
+                    <label>详细背景故事与徒步建议</label>
+                    <textarea id="mStory" rows="3" required placeholder="描写它的壮丽景观、攀登历史或徒步线路推荐..."></textarea>
                 </div>
                 <button type="submit" class="add-btn" style="width: 100%; margin-top: 10px;">发布到列表</button>
             </form>
@@ -392,79 +455,226 @@ HTML
 
     <!-- 页脚 -->
     <footer>
-        <p>© 2026 峰境无界 - Explore the Majestic Mountains Worldwide</p>
+        <p>© 2026 峰境无界 - Global Mountains Encyclopedia & Expedition</p>
     </footer>
 
-    <!-- 数据与逻辑脚本 -->
+    <!-- 数据与交互逻辑 -->
     <script>
-        // 预设全球经典山峰数据
+        // 核心全球名山数据库（每座山均配置 5 张精选照片与详尽信息）
         let mountains = [
+            // ================= 亚洲 (Asia) =================
             {
-                id: 1,
-                name: "珠穆朗玛峰 (Mount Everest)",
+                id: 101,
+                name: "珠穆朗玛峰 (Mount Everest / 萨迦玛塔)",
                 continent: "亚洲",
-                location: "中国 / 尼泊尔",
+                location: "中国 西藏 / 尼泊尔",
+                range: "喜马拉雅山脉",
                 altitude: 8848.86,
-                image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
-                desc: "世界第一高峰，喜马拉雅山脉的王者，无数登山者心中的终极圣殿。",
-                season: "4月 - 5月 (春季攀登季)"
+                images: [
+                    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "世界最高峰，地球之巅。藏语意为'第三女神'，终年覆雪，气势磅礴，是全人类探险精神的终极图腾。",
+                detailedStory: "珠穆朗玛峰拥有南坡（尼泊尔）和北坡（中国西藏）两条经典路线。著名的昆布冰瀑（Khumbu Icefall）和希拉里台阶是攀登者的生死考验。对于普通旅行者，西藏珠峰大本营（EBC）和尼泊尔Gokyo/EBC徒步路线是近距离领略金字塔形雪峰的绝佳方式。",
+                season: "4月 - 5月 (攀登季) / 10月 - 11月 (最佳观赏徒步季)"
             },
             {
-                id: 2,
-                name: "马特洪峰 (Matterhorn)",
-                continent: "欧洲",
-                location: "瑞士 / 意大利",
-                altitude: 4478,
-                image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=800&q=80",
-                desc: "阿尔卑斯山脉最具辨识度的金字塔形山峰，也是瑞士三角巧克力的标志原型。",
-                season: "7月 - 9月 (最佳徒步与观赏期)"
+                id: 102,
+                name: "南迦巴瓦峰 (Namcha Barwa)",
+                continent: "亚洲",
+                location: "中国 西藏 林芝",
+                range: "喜马拉雅山脉东端",
+                altitude: 7782,
+                images: [
+                    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "《中国国家地理》评选的'中国最美山峰'第一名，被誉为'云中天堂'与'西藏众山之父'。",
+                detailedStory: "南迦巴瓦峰坐落于雅鲁藏布大峡谷的大拐弯处，巨大的垂直落差造就了从热带雨林到极地冰川的完整自然生态带。因常年云雾缭绕难见真容，相传能看见南迦巴瓦日落金山的人会获得一整年的好运。",
+                season: "10月 - 次年4月 (秋冬季干燥少云，偶见真容概率最高)"
             },
             {
-                id: 3,
-                name: "乞力马扎罗山 (Kilimanjaro)",
-                continent: "非洲",
-                location: "坦桑尼亚",
-                altitude: 5895,
-                image: "https://images.unsplash.com/photo-1650668301292-349f7ba30438?auto=format&fit=crop&w=800&q=80",
-                desc: "“非洲屋脊”，赤道旁常年覆雪的独立火山体，无需专业登山技能即可攀登的七大洲最高峰之一。",
-                season: "1月 - 3月 / 6月 - 10月"
+                id: 103,
+                name: "K2 / 乔戈里峰 (Mount Godwin-Austen)",
+                continent: "亚洲",
+                location: "巴基斯坦 / 中国 新疆",
+                range: "喀喇昆仑山脉",
+                altitude: 8611,
+                images: [
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "世界第二高峰，也是公认攀登难度与死亡率极高的'野蛮巨峰'（Savage Mountain）。",
+                detailedStory: "K2 以其陡峭的山体、致命的落石以及变化莫测的恶劣风暴闻名于世。阿布鲁齐山脊（Abruzzi Spur）和瓶颈路段（Bottleneck）是人类登山史上的极限之地。每 4 位成功登顶的登山者中就有 1 位长眠于此。",
+                season: "6月 - 8月 (仅适合夏季极限攀登)"
             },
             {
-                id: 4,
-                name: "菲茨罗伊峰 (Monte Fitz Roy)",
-                continent: "美洲",
-                location: "阿根廷 巴塔哥尼亚",
-                altitude: 3405,
-                image: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=800&q=80",
-                desc: "巴塔哥尼亚的标志性花岗岩锯齿巨峰，户外品牌 Patagonia 的 Logo 原型。",
-                season: "11月 - 次年3月 (南半球夏季)"
-            },
-            {
-                id: 5,
+                id: 104,
                 name: "富士山 (Mount Fuji)",
                 continent: "亚洲",
                 location: "日本 静冈 / 山梨",
+                range: "富士火山带",
                 altitude: 3776,
-                image: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=800&q=80",
-                desc: "日本的象征，完美的对称圆锥形火山体，被列入世界文化遗产名录。",
-                season: "7月上旬 - 9月上旬 (官方开山期)"
+                images: [
+                    "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "日本的最高峰与国家象征，完美的对称圆锥形火山体，世界文化遗产名录之一。",
+                detailedStory: "富士山自古以来就是日本神道教与佛教的圣山。每年 7-9 月为官方开山季节，成千上万的登山者在此夜行攀登，只为在山顶神社守候被称为'御来光'（Goraiko）的壮美日出。",
+                season: "7月上旬 - 9月上旬 (官方登山季) / 11月 - 4月 (远眺雪冠最佳期)"
+            },
+
+            // ================= 欧洲 (Europe) =================
+            {
+                id: 201,
+                name: "勃朗峰 (Mont Blanc)",
+                continent: "欧洲",
+                location: "法国 / 意大利",
+                range: "阿尔卑斯山脉",
+                altitude: 4808.72,
+                images: [
+                    "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "阿尔卑斯山脉第一高峰，现代登山运动的诞生地，环勃朗峰徒步（TMB）享誉全球。",
+                detailedStory: "1786年人类首次登顶勃朗峰，标志着现代登山运动的起源。围绕勃朗峰一圈的 TMB 跨越法、意、瑞三国，全程约 170 公里，沿途拥有无与伦比的冰川湖泊、高山草甸和传统木屋驿站。",
+                season: "6月中旬 - 9月中旬 (TMB最佳徒步季)"
             },
             {
-                id: 6,
+                id: 202,
+                name: "马特洪峰 (Matterhorn)",
+                continent: "欧洲",
+                location: "瑞士 采尔马特 / 意大利",
+                range: "本宁阿尔卑斯山脉",
+                altitude: 4478,
+                images: [
+                    "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "阿尔卑斯最具辨识度的四面金字塔形孤峰，瑞士阿尔卑斯皇冠上的明珠。",
+                detailedStory: "马特洪峰以陡峭的角度直插云霄，采尔马特的利菲尔湖（Riffelsee）倒影是世界摄影师的朝圣地。山下的采尔马特小镇实行完全无燃油车禁令，保留了极其纯净的阿尔卑斯雪山风貌。",
+                season: "7月 - 9月 (徒步/登山) / 12月 - 4月 (滑雪度假)"
+            },
+
+            // ================= 美洲 (Americas) =================
+            {
+                id: 301,
+                name: "雷尼尔山 (Mount Rainier)",
+                continent: "美洲",
+                location: "美国 华盛顿州",
+                range: "喀斯喀特山脉 (Cascades)",
+                altitude: 4392,
+                images: [
+                    "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "西雅图天际线的灵魂背景，美国本土冰川面积最大的层状活火山。",
+                detailedStory: "雷尼尔山被 25 条主要冰川覆盖，夏季天堂（Paradise）和日出（Sunrise）景区的亚高山野花盛开，宛如仙境。环绕整座山的仙境步道（Wonderland Trail）长达 150 公里，是全美顶级背包客路线。",
+                season: "7月中旬 - 8月下旬 (高山野花盛开与最佳徒步期)"
+            },
+            {
+                id: 302,
+                name: "阿空加瓜峰 (Aconcagua)",
+                continent: "美洲",
+                location: "阿根廷 门多萨省",
+                range: "安第斯山脉",
+                altitude: 6961,
+                images: [
+                    "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "西半球与南半球的最高峰，亚洲以外的世界最高点（七大洲第二高峰）。",
+                detailedStory: "阿空加瓜峰被称为'非技术攀登最高峰'（Normal Route 无需专业绳索冰攀技能），但其极端的狂风（Viento Blanco）与严酷的超高海拔缺氧环境依然对体能构成了极致挑战。",
+                season: "12月 - 次年2月 (南半球盛夏攀登季)"
+            },
+            {
+                id: 303,
+                name: "菲茨罗伊峰 (Monte Fitz Roy)",
+                continent: "美洲",
+                location: "阿根廷 巴塔哥尼亚",
+                range: "巴塔哥尼亚安第斯山脉",
+                altitude: 3405,
+                images: [
+                    "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "巴塔哥尼亚的标志性花岗岩锯齿巨峰，著名户外品牌 Patagonia 的 Logo 原型。",
+                detailedStory: "菲茨罗伊峰位于洛斯格拉西亚雷斯国家公园，被狂风和险峻花岗岩壁环绕。前往 Laguna de los Tres（三湖视角）的徒步路线让旅行者能够直面这组令人窒息的花岗岩群峰与绿松石色冰湖。",
+                season: "11月 - 次年3月 (南半球夏季，徒步最佳时节)"
+            },
+
+            // ================= 非洲 (Africa) =================
+            {
+                id: 401,
+                name: "乞力马扎罗山 (Mount Kilimanjaro)",
+                continent: "非洲",
+                location: "坦桑尼亚",
+                range: "东非大裂谷火山群",
+                altitude: 5895,
+                images: [
+                    "https://images.unsplash.com/photo-1650668301292-349f7ba30438?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "非洲最高峰，世界上最高的独立单体火山，海明威笔下永恒的雪山。",
+                detailedStory: "从山脚的热带雨林、灌木荒原、高山苔原直到顶峰乌呼鲁峰（Uhuru Peak）的永久冰川，徒步者在 5-7 天内相当于经历从赤道到北极的所有气候景观。",
+                season: "1月 - 3月 / 6月 - 10月 (旱季)"
+            },
+
+            // ================= 大洋洲 (Oceania) =================
+            {
+                id: 501,
                 name: "库克山 (Aoraki / Mount Cook)",
                 continent: "大洋洲",
                 location: "新西兰 南岛",
+                range: "南阿尔卑斯山脉",
                 altitude: 3724,
-                image: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=800&q=80",
-                desc: "新西兰最高峰，周围环绕着壮丽的塔斯曼冰川与南阿尔卑斯群山，徒步者的天堂。",
-                season: "12月 - 次年2月"
+                images: [
+                    "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
+                ],
+                desc: "毛利语意为'穿透云层之峰'，新西兰最高峰，埃德蒙·希拉里爵士登顶珠峰前的训练基地。",
+                detailedStory: "库克山国家公园拥有南半球最清澈的国际黑暗天空保护区（Dark Sky Reserve），胡克谷步道（Hooker Valley Track）沿途穿越吊桥、冰川湖与碎石滩，是全球最亲民的顶级徒步路线之一。",
+                season: "11月 - 次年3月 (南半球夏季)"
             }
         ];
 
         let currentContinent = 'All';
         let currentSearch = '';
 
-        // 渲染山峰列表
+        // 渲染名山卡片网格
         function renderMountains() {
             const grid = document.getElementById('mountainGrid');
             grid.innerHTML = '';
@@ -473,6 +683,7 @@ HTML
                 const matchContinent = currentContinent === 'All' || m.continent === currentContinent;
                 const matchSearch = m.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
                                     m.location.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                                    (m.range && m.range.toLowerCase().includes(currentSearch.toLowerCase())) ||
                                     m.desc.toLowerCase().includes(currentSearch.toLowerCase());
                 return matchContinent && matchSearch;
             });
@@ -489,14 +700,15 @@ HTML
                 const card = document.createElement('div');
                 card.className = 'mountain-card';
                 card.onclick = () => openDetailModal(m.id);
+                const coverImage = m.images && m.images.length > 0 ? m.images[0] : 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80';
                 card.innerHTML = `
                     <div class="card-img-wrapper">
-                        <img src="${m.image}" alt="${m.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'">
+                        <img src="${coverImage}" alt="${m.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'">
                         <span class="card-tag">${m.continent}</span>
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">${m.name}</h3>
-                        <div class="card-meta">📍 ${m.location}</div>
+                        <div class="card-meta">📍 ${m.location} ${m.range ? '· ⛰️ ' + m.range : ''}</div>
                         <p class="card-desc">${m.desc}</p>
                         <div class="card-footer">
                             <span>海拔高度</span>
@@ -523,23 +735,56 @@ HTML
             renderMountains();
         }
 
-        // 打开详情弹窗
+        // 打开详情弹窗（支持 5 图缩略图切换与长篇故事）
         function openDetailModal(id) {
             const m = mountains.find(item => item.id === id);
             if (!m) return;
 
+            const images = m.images && m.images.length > 0 ? m.images : [
+                'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80'
+            ];
+
+            let thumbsHtml = '';
+            images.forEach((imgUrl, index) => {
+                thumbsHtml += `<img src="${imgUrl}" class="gallery-thumb ${index === 0 ? 'active' : ''}" onclick="switchGalleryImg('${imgUrl}', this)">`;
+            });
+
             const detailBody = document.getElementById('detailBody');
             detailBody.innerHTML = `
-                <img src="${m.image}" style="width: 100%; height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 20px;">
-                <h2 style="color: var(--primary-color); margin-bottom: 10px;">${m.name}</h2>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">📍 ${m.location} · 🏷️ ${m.continent}</p>
-                <div style="background: #edf2f7; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-around;">
-                    <div><strong>海拔：</strong> <span style="color:#c53030;">${m.altitude.toLocaleString()} m</span></div>
+                <img id="mainGalleryImg" src="${images[0]}" class="gallery-main-img" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80'">
+                <div class="gallery-thumbnails">${thumbsHtml}</div>
+                <h2 style="color: var(--primary-color); margin-bottom: 6px;">${m.name}</h2>
+                <p style="color: var(--text-muted); margin-bottom: 16px;">📍 ${m.location} · 🏷️ ${m.continent} ${m.range ? '· ⛰️ ' + m.range : ''}</p>
+                
+                <div class="info-grid">
+                    <div><strong>海拔高度：</strong> <span style="color:#c53030; font-weight: bold;">${m.altitude.toLocaleString()} m</span></div>
                     <div><strong>推荐季节：</strong> <span>${m.season || '全年适宜'}</span></div>
                 </div>
-                <p style="line-height: 1.8; color: #4a5568;">${m.desc}</p>
+
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 6px;">📖 亮点速览</h4>
+                    <p style="color: #4a5568; line-height: 1.7;">${m.desc}</p>
+                </div>
+
+                <div>
+                    <h4 style="color: var(--primary-color); margin-bottom: 6px;">🏔️ 深度故事与探险指南</h4>
+                    <p style="color: #4a5568; line-height: 1.8;">${m.detailedStory || '暂无详细背景记录，欢迎登山者补充！'}</p>
+                </div>
             `;
             document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // 切换主画廊大图
+        function switchGalleryImg(imgUrl, thumbEl) {
+            const mainImg = document.getElementById('mainGalleryImg');
+            mainImg.style.opacity = '0.4';
+            setTimeout(() => {
+                mainImg.src = imgUrl;
+                mainImg.style.opacity = '1';
+            }, 150);
+
+            document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+            thumbEl.classList.add('active');
         }
 
         // 打开添加弹窗
@@ -553,18 +798,27 @@ HTML
             document.getElementById('addModal').style.display = 'none';
         }
 
-        // 处理用户添加山峰
+        // 处理用户添加新山峰
         function handleAddMountain(e) {
             e.preventDefault();
+            const userImg = document.getElementById('mImage').value || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80';
             const newMountain = {
                 id: Date.now(),
                 name: document.getElementById('mName').value,
                 continent: document.getElementById('mContinent').value,
                 location: document.getElementById('mLocation').value,
+                range: document.getElementById('mRange').value,
                 altitude: parseFloat(document.getElementById('mAltitude').value),
-                image: document.getElementById('mImage').value || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+                images: [
+                    userImg,
+                    "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
+                ],
                 desc: document.getElementById('mDesc').value,
-                season: "徒步/攀登爱好推荐"
+                detailedStory: document.getElementById('mStory').value,
+                season: "登山/户外爱好者推荐"
             };
 
             mountains.unshift(newMountain);
@@ -580,7 +834,7 @@ HTML
             }
         };
 
-        // 初始化加载
+        // 初始化渲染
         renderMountains();
     </script>
 </body>
