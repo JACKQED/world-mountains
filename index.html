@@ -5,7 +5,7 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>峰境无界 | 全球名山探索图鉴</title>
+    <title>峰境无界 | 全球名山百科与探险图鉴</title>
     <style>
         :root {
             --primary-color: #1a365d;
@@ -35,7 +35,7 @@ HTML
             position: relative;
             height: 55vh;
             min-height: 380px;
-            background: linear-gradient(rgba(10, 25, 47, 0.6), rgba(10, 25, 47, 0.75)),
+            background: linear-gradient(rgba(10, 25, 47, 0.65), rgba(10, 25, 47, 0.8)),
                         url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -237,7 +237,7 @@ HTML
             color: #c53030;
         }
 
-        /* 模态弹窗 */
+        /* 模态弹窗优化，最大宽度扩宽至 800px 以适应深度百科排版 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -256,7 +256,7 @@ HTML
         .modal-content {
             background: white;
             border-radius: 20px;
-            max-width: 750px;
+            max-width: 800px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -292,10 +292,9 @@ HTML
             background: #cbd5e0;
         }
 
-        /* 详情相册多图切换样式 */
         .gallery-main-img {
             width: 100%;
-            height: 340px;
+            height: 360px;
             object-fit: cover;
             border-radius: 12px;
             margin-bottom: 12px;
@@ -312,7 +311,7 @@ HTML
         }
 
         .gallery-thumb {
-            width: 75px;
+            width: 80px;
             height: 55px;
             object-fit: cover;
             border-radius: 6px;
@@ -335,7 +334,7 @@ HTML
             border-radius: 12px;
             margin-bottom: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
             font-size: 0.9rem;
         }
@@ -374,13 +373,13 @@ HTML
     <!-- 顶部横幅 -->
     <header>
         <h1 class="header-title">🏔️ 峰 境 无 界</h1>
-        <p class="header-subtitle">探寻全球壮丽山峰，记录山野与攀登的故事。收录世界名山图鉴与徒步探险指南。</p>
+        <p class="header-subtitle">探寻全球壮丽山峰，记录山野与攀登的故事。收录世界名山深度百科与探险指南。</p>
     </header>
 
     <!-- 控制面板：搜索 + 筛选 + 添加 -->
     <div class="controls-container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 搜索山峰名称、国家、山脉或亮点..." oninput="handleSearch()">
+            <input type="text" id="searchInput" placeholder="🔍 搜索山峰名称、国家、山脉或特点..." oninput="handleSearch()">
         </div>
         <div class="filter-buttons">
             <button class="filter-btn active" onclick="filterByContinent('All')">全部</button>
@@ -396,7 +395,7 @@ HTML
     <!-- 山峰卡片网格 -->
     <main class="mountain-grid" id="mountainGrid"></main>
 
-    <!-- 详情弹窗 (带 5 图相册) -->
+    <!-- 详情弹窗 -->
     <div class="modal-overlay" id="detailModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModals()">&times;</button>
@@ -445,8 +444,8 @@ HTML
                     <input type="text" id="mDesc" required placeholder="一句话介绍：如'蜀山之王，横断山脉最高峰'">
                 </div>
                 <div class="form-group">
-                    <label>详细背景故事与徒步建议</label>
-                    <textarea id="mStory" rows="3" required placeholder="描写它的壮丽景观、攀登历史或徒步线路推荐..."></textarea>
+                    <label>详细背景故事与徒步建议 (支持 HTML 排版)</label>
+                    <textarea id="mStory" rows="4" required placeholder="详细描写它的地质、风貌及徒步路线..."></textarea>
                 </div>
                 <button type="submit" class="add-btn" style="width: 100%; margin-top: 10px;">发布到列表</button>
             </form>
@@ -460,12 +459,12 @@ HTML
 
     <!-- 数据与交互逻辑 -->
     <script>
-        // 核心全球名山数据库（每座山均配置 5 张精选照片与详尽信息）
+        // 全球名山百科数据库（全部升级为深度百科结构，并配置 5 张真实高清图片）
         let mountains = [
             // ================= 亚洲 (Asia) =================
             {
                 id: 101,
-                name: "珠穆朗玛峰 (Mount Everest / 萨迦玛塔)",
+                name: "珠穆朗玛峰 (Mount Everest)",
                 continent: "亚洲",
                 location: "中国 西藏 / 尼泊尔",
                 range: "喜马拉雅山脉",
@@ -478,8 +477,17 @@ HTML
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
                 ],
                 desc: "世界最高峰，地球之巅。藏语意为'第三女神'，终年覆雪，气势磅礴，是全人类探险精神的终极图腾。",
-                detailedStory: "珠穆朗玛峰拥有南坡（尼泊尔）和北坡（中国西藏）两条经典路线。著名的昆布冰瀑（Khumbu Icefall）和希拉里台阶是攀登者的生死考验。对于普通旅行者，西藏珠峰大本营（EBC）和尼泊尔Gokyo/EBC徒步路线是近距离领略金字塔形雪峰的绝佳方式。",
-                season: "4月 - 5月 (攀登季) / 10月 - 11月 (最佳观赏徒步季)"
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🌍 地质成因与历史测量</h4>
+                        <p>珠穆朗玛峰是由印度板块与欧亚板块碰撞挤压而隆起的年轻褶皱山脉。中国与尼泊尔联合公布的最新高程为 8848.86 米，它以每年约几毫米的速度在持续缓慢抬升。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🧗 攀登路线与路线挑战</h4>
+                        <p>主要分为南坡（尼泊尔侧，经昆布冰瀑、洛子峰面）和北坡（中国西藏侧，经北坳、大风雪坡）。海拔超过 8000 米的区域被称为'死亡区'，极度缺氧与严寒对人类生理极限构成了终极考验。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🥾 普通旅行者路线</h4>
+                        <p>无法登顶的旅行者可以通过世界闻名的 EBC（珠峰大本营徒步路线）抵达南坡大本营，或者驱车前往中国西藏的珠峰大本营，直面震撼的群峰雪景。</p>
+                    </div>
+                `,
+                season: "4月 - 5月 (春季攀登季) / 10月 - 11月 (秋季最佳徒步季)"
             },
             {
                 id: 102,
@@ -496,12 +504,19 @@ HTML
                     "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80"
                 ],
                 desc: "《中国国家地理》评选的'中国最美山峰'第一名，被誉为'云中天堂'与'西藏众山之父'。",
-                detailedStory: "南迦巴瓦峰坐落于雅鲁藏布大峡谷的大拐弯处，巨大的垂直落差造就了从热带雨林到极地冰川的完整自然生态带。因常年云雾缭绕难见真容，相传能看见南迦巴瓦日落金山的人会获得一整年的好运。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🏔️ 巨大落差与峡谷奇观</h4>
+                        <p>南迦巴瓦峰坐落于雅鲁藏布大峡谷的大拐弯处，其巨大的垂直落差造就了从热带雨林到极地冰川的完整生态带。巨大的三角形峰体直插云霄，气势极其震撼。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">☁️ 难得一见的真容</h4>
+                        <p>由于印度洋暖湿气流顺峡谷北上，峰顶常年被浓雾与云层包裹，极难一窥全貌。藏族民间传说中，只有福报深厚的人才能有幸目睹其金字塔般的日落金山真容。</p>
+                    </div>
+                `,
                 season: "10月 - 次年4月 (秋冬季干燥少云，偶见真容概率最高)"
             },
             {
                 id: 103,
-                name: "K2 / 乔戈里峰 (Mount Godwin-Austen)",
+                name: "乔戈里峰 / K2",
                 continent: "亚洲",
                 location: "巴基斯坦 / 中国 新疆",
                 range: "喀喇昆仑山脉",
@@ -513,9 +528,16 @@ HTML
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "世界第二高峰，也是公认攀登难度与死亡率极高的'野蛮巨峰'（Savage Mountain）。",
-                detailedStory: "K2 以其陡峭的山体、致命的落石以及变化莫测的恶劣风暴闻名于世。阿布鲁齐山脊（Abruzzi Spur）和瓶颈路段（Bottleneck）是人类登山史上的极限之地。每 4 位成功登顶的登山者中就有 1 位长眠于此。",
-                season: "6月 - 8月 (仅适合夏季极限攀登)"
+                desc: "世界第二高峰，公认攀登难度与死亡率极高的'野蛮巨峰'（Savage Mountain）。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">⚠️ 险峻的野蛮巨峰</h4>
+                        <p>K2 呈现出锐利的岩石金字塔造型，四壁陡峭，落石频发。相比珠峰，其商业化程度较低，对顶尖登山者的技术、心理和应变能力要求达到了人类极限。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">⛺ 极致的喀喇昆仑徒步</h4>
+                        <p>通往 K2 大本营的 Concordia 徒步路线被誉为'世界上最伟大的山岳徒步之一'，周围环绕着大量 7000-8000 米级的巨峰冰川世界。</p>
+                    </div>
+                `,
+                season: "6月 - 8月 (夏季气温相对稳定窗口期)"
             },
             {
                 id: 104,
@@ -531,9 +553,16 @@ HTML
                     "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "日本的最高峰与国家象征，完美的对称圆锥形火山体，世界文化遗产名录之一。",
-                detailedStory: "富士山自古以来就是日本神道教与佛教的圣山。每年 7-9 月为官方开山季节，成千上万的登山者在此夜行攀登，只为在山顶神社守候被称为'御来光'（Goraiko）的壮美日出。",
-                season: "7月上旬 - 9月上旬 (官方登山季) / 11月 - 4月 (远眺雪冠最佳期)"
+                desc: "日本最高峰与国家精神象征，完美对称的圆锥形活火山，世界文化遗产。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">⛩️ 文化与火山地貌</h4>
+                        <p>富士山是一座年轻的成层火山，拥有近乎完美的对称坡度。几个世纪以来，它一直是日本浮世绘艺术、文学和神道教信仰的核心灵感源泉。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🚶 登山与御来光</h4>
+                        <p>每年夏季官方开山期，成千上万的游客会选择夜间攀登，只为在山顶神社静候被尊称为'御来光'的辉煌日出。</p>
+                    </div>
+                `,
+                season: "7月上旬 - 9月上旬 (官方开山期) / 11月 - 4月 (远眺最佳雪冠期)"
             },
 
             // ================= 欧洲 (Europe) =================
@@ -551,9 +580,16 @@ HTML
                     "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "阿尔卑斯山脉第一高峰，现代登山运动的诞生地，环勃朗峰徒步（TMB）享誉全球。",
-                detailedStory: "1786年人类首次登顶勃朗峰，标志着现代登山运动的起源。围绕勃朗峰一圈的 TMB 跨越法、意、瑞三国，全程约 170 公里，沿途拥有无与伦比的冰川湖泊、高山草甸和传统木屋驿站。",
-                season: "6月中旬 - 9月中旬 (TMB最佳徒步季)"
+                desc: "阿尔卑斯最高峰，现代登山运动诞生地。横跨法意边境，环勃朗峰徒步（TMB）享誉全球。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">📜 现代登山发源地</h4>
+                        <p>1786年，萨利姆医生和巴尔马成功登顶勃朗峰，这被公认为现代登山运动（Alpinism）的起点。山脚下的霞慕尼（Chamonix）也因此成为世界户外探险之都。</p>
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🥾 环勃朗峰徒步 (TMB)</h4>
+                        <p>经典的长距离徒步路线 TMB 全长约 170 公里，沿途串联起法国、意大利和瑞士的阿尔卑斯冰川、高山牧场和精致小镇。</p>
+                    </div>
+                `,
+                season: "6月中旬 - 9月中旬 (TMB最佳徒步季节)"
             },
             {
                 id: 202,
@@ -569,9 +605,14 @@ HTML
                     "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "阿尔卑斯最具辨识度的四面金字塔形孤峰，瑞士阿尔卑斯皇冠上的明珠。",
-                detailedStory: "马特洪峰以陡峭的角度直插云霄，采尔马特的利菲尔湖（Riffelsee）倒影是世界摄影师的朝圣地。山下的采尔马特小镇实行完全无燃油车禁令，保留了极其纯净的阿尔卑斯雪山风貌。",
-                season: "7月 - 9月 (徒步/登山) / 12月 - 4月 (滑雪度假)"
+                desc: "阿尔卑斯最具辨识度的四面金字塔形孤峰，瑞士采尔马特皇冠上的明珠。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">📐 完美几何美学</h4>
+                        <p>马特洪峰以其直插云霄的独立四面金字塔岩壁震撼世人，其标志性造型也是瑞士三角巧克力的灵感原型。采尔马特小镇实施全面禁车，保留了极致纯净的阿尔卑斯风情。</p>
+                    </div>
+                `,
+                season: "7月 - 9月 (徒步与登顶窗口) / 12月 - 4月 (滑雪胜地)"
             },
 
             // ================= 美洲 (Americas) =================
@@ -580,7 +621,7 @@ HTML
                 name: "雷尼尔山 (Mount Rainier)",
                 continent: "美洲",
                 location: "美国 华盛顿州",
-                range: "喀斯喀特山脉 (Cascades)",
+                range: "喀斯喀特山脉",
                 altitude: 4392,
                 images: [
                     "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=1200&q=80",
@@ -590,8 +631,13 @@ HTML
                     "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80"
                 ],
                 desc: "西雅图天际线的灵魂背景，美国本土冰川面积最大的层状活火山。",
-                detailedStory: "雷尼尔山被 25 条主要冰川覆盖，夏季天堂（Paradise）和日出（Sunrise）景区的亚高山野花盛开，宛如仙境。环绕整座山的仙境步道（Wonderland Trail）长达 150 公里，是全美顶级背包客路线。",
-                season: "7月中旬 - 8月下旬 (高山野花盛开与最佳徒步期)"
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">❄️ 冰川与繁花仙境</h4>
+                        <p>雷尼尔山拥有 25 条主要冰川。每年盛夏，天堂（Paradise）景区的亚高山草甸会爆发出海量的野生野花，与巨大的白色雪山交相辉映，宛如人间仙境。</p>
+                    </div>
+                `,
+                season: "7月中旬 - 8月下旬 (高山野花盛开与徒步黄金期)"
             },
             {
                 id: 302,
@@ -607,9 +653,14 @@ HTML
                     "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "西半球与南半球的最高峰，亚洲以外的世界最高点（七大洲第二高峰）。",
-                detailedStory: "阿空加瓜峰被称为'非技术攀登最高峰'（Normal Route 无需专业绳索冰攀技能），但其极端的狂风（Viento Blanco）与严酷的超高海拔缺氧环境依然对体能构成了极致挑战。",
-                season: "12月 - 次年2月 (南半球盛夏攀登季)"
+                desc: "西半球与南半球最高峰，七大洲高峰之一，被称为非技术攀登最高峰。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🌬️ 安第斯巨无霸与狂风</h4>
+                        <p>虽然常规路线（Normal Route）无需复杂的冰壁攀登技巧，但其极端的超高海拔缺氧和臭名昭著的高山狂风（Viento Blanco）依然对登山者的耐力是极大的摧残。</p>
+                    </div>
+                `,
+                season: "12月 - 次年2月 (南半球盛夏攀登窗口)"
             },
             {
                 id: 303,
@@ -625,9 +676,14 @@ HTML
                     "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "巴塔哥尼亚的标志性花岗岩锯齿巨峰，著名户外品牌 Patagonia 的 Logo 原型。",
-                detailedStory: "菲茨罗伊峰位于洛斯格拉西亚雷斯国家公园，被狂风和险峻花岗岩壁环绕。前往 Laguna de los Tres（三湖视角）的徒步路线让旅行者能够直面这组令人窒息的花岗岩群峰与绿松石色冰湖。",
-                season: "11月 - 次年3月 (南半球夏季，徒步最佳时节)"
+                desc: "巴塔哥尼亚标志性花岗岩锯齿巨峰，著名户外品牌 Patagonia 的 Logo 原型。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🧗 荒野与锯齿岩壁</h4>
+                        <p>菲茨罗伊峰以其险峻锐利的花岗岩岩针闻名。前往 Laguna de los Tres 的经典徒步路线能让探险者直面泛着绿松石光泽的冰川湖与巍峨岩峰。</p>
+                    </div>
+                `,
+                season: "11月 - 次年3月 (南半球夏季，最佳徒步季)"
             },
 
             // ================= 非洲 (Africa) =================
@@ -639,14 +695,19 @@ HTML
                 range: "东非大裂谷火山群",
                 altitude: 5895,
                 images: [
-                    "https://images.unsplash.com/photo-1650668301292-349f7ba30438?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1200&q=80"
+                    "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "非洲最高峰，世界上最高的独立单体火山，海明威笔下永恒的雪山。",
-                detailedStory: "从山脚的热带雨林、灌木荒原、高山苔原直到顶峰乌呼鲁峰（Uhuru Peak）的永久冰川，徒步者在 5-7 天内相当于经历从赤道到北极的所有气候景观。",
+                desc: "非洲最高峰，世界最高独立单体火山。海明威笔下永恒的雪山，可无技术徒步登顶。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">🌋 地理构造与五大生态带</h4>
+                        <p>乞力马扎罗由三个火山锥组成。在 5-7 天的攀登中，徒步者将依次穿越南美雨林带、石楠荒原带、高山荒漠带和极地冰川带，经历从赤道到极地的全部气候景观。</p>
+                    </div>
+                `,
                 season: "1月 - 3月 / 6月 - 10月 (旱季)"
             },
 
@@ -665,8 +726,13 @@ HTML
                     "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
                     "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1200&q=80"
                 ],
-                desc: "毛利语意为'穿透云层之峰'，新西兰最高峰，埃德蒙·希拉里爵士登顶珠峰前的训练基地。",
-                detailedStory: "库克山国家公园拥有南半球最清澈的国际黑暗天空保护区（Dark Sky Reserve），胡克谷步道（Hooker Valley Track）沿途穿越吊桥、冰川湖与碎石滩，是全球最亲民的顶级徒步路线之一。",
+                desc: "毛利语意为'穿透云层之峰'，新西兰最高峰，埃德蒙·希拉里爵士的训练基地。",
+                detailedStory: `
+                    <div style="line-height: 1.8; color: #374151;">
+                        <h4 style="color: #1a365d; margin: 14px 0 6px;">⭐ 冰川与暗夜星空</h4>
+                        <p>库克山国家公园拥有壮丽的塔斯曼冰川与胡克谷步道。这里同时也是世界著名的国际黑暗天空保护区，夜空中的银河与雪山交相辉映，美得令人窒息。</p>
+                    </div>
+                `,
                 season: "11月 - 次年3月 (南半球夏季)"
             }
         ];
@@ -735,7 +801,7 @@ HTML
             renderMountains();
         }
 
-        // 打开详情弹窗（支持 5 图缩略图切换与长篇故事）
+        // 打开详情弹窗
         function openDetailModal(id) {
             const m = mountains.find(item => item.id === id);
             if (!m) return;
@@ -767,8 +833,8 @@ HTML
                 </div>
 
                 <div>
-                    <h4 style="color: var(--primary-color); margin-bottom: 6px;">🏔️ 深度故事与探险指南</h4>
-                    <p style="color: #4a5568; line-height: 1.8;">${m.detailedStory || '暂无详细背景记录，欢迎登山者补充！'}</p>
+                    <h4 style="color: var(--primary-color); margin-bottom: 6px;">🏔️ 深度百科与探险指南</h4>
+                    <div>${m.detailedStory || '暂无详细背景记录，欢迎补充！'}</div>
                 </div>
             `;
             document.getElementById('detailModal').style.display = 'flex';
@@ -817,7 +883,7 @@ HTML
                     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
                 ],
                 desc: document.getElementById('mDesc').value,
-                detailedStory: document.getElementById('mStory').value,
+                detailedStory: `<p style="line-height: 1.8; color: #374151;">${document.getElementById('mStory').value}</p>`,
                 season: "登山/户外爱好者推荐"
             };
 
