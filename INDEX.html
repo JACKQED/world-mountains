@@ -1,0 +1,587 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>峰境无界 | 世界名山探索</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --accent-color: #2b6cb0;
+            --bg-light: #f7fafc;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 顶部导航与横幅 */
+        header {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            background: linear-gradient(rgba(10, 25, 47, 0.65), rgba(10, 25, 47, 0.75)),
+                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .header-subtitle {
+            font-size: 1.25rem;
+            max-width: 650px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        /* 控制区域：搜索与分类 */
+        .controls-container {
+            max-width: 1200px;
+            margin: -35px auto 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            background: #edf2f7;
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .add-btn {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-btn:hover {
+            background: #1a4971;
+            transform: translateY(-2px);
+        }
+
+        /* 山峰卡片网格 */
+        .mountain-grid {
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .mountain-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mountain-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .mountain-card:hover .card-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #4a5568;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #edf2f7;
+            padding-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .altitude-badge {
+            color: #c53030;
+        }
+
+        /* 模态弹窗 (详情 & 添加) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 30px;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #edf2f7;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #1a202c;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部横幅 -->
+    <header>
+        <h1 class="header-title">🏔️ 峰 境 无 界</h1>
+        <p class="header-subtitle">为山野而生，追逐群峰的轮廓。收录全球壮丽山峰，记录每一次出发与眺望。</p>
+    </header>
+
+    <!-- 控制面板：搜索 + 筛选 + 添加 -->
+    <div class="controls-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 搜索山峰名称、国家或关键词..." oninput="handleSearch()">
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterByContinent('All')">全部</button>
+            <button class="filter-btn" onclick="filterByContinent('亚洲')">亚洲</button>
+            <button class="filter-btn" onclick="filterByContinent('欧洲')">欧洲</button>
+            <button class="filter-btn" onclick="filterByContinent('美洲')">美洲</button>
+            <button class="filter-btn" onclick="filterByContinent('非洲')">非洲</button>
+            <button class="filter-btn" onclick="filterByContinent('大洋洲')">大洋洲</button>
+        </div>
+        <button class="add-btn" onclick="openAddModal()">+ 分享山峰</button>
+    </div>
+
+    <!-- 山峰卡片网格 -->
+    <main class="mountain-grid" id="mountainGrid"></main>
+
+    <!-- 详情弹窗 -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModals()">&times;</button>
+            <div id="detailBody"></div>
+        </div>
+    </div>
+
+    <!-- 添加新山峰弹窗 -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModals()">&times;</button>
+            <h2 style="margin-bottom: 20px; color: var(--primary-color);">添加新的大山</h2>
+            <form id="addMountainForm" onsubmit="handleAddMountain(event)">
+                <div class="form-group">
+                    <label>山峰名称</label>
+                    <input type="text" id="mName" required placeholder="如：南迦巴瓦峰 / Mount Rainier">
+                </div>
+                <div class="form-group">
+                    <label>所属大洲</label>
+                    <select id="mContinent">
+                        <option value="亚洲">亚洲</option>
+                        <option value="欧洲">欧洲</option>
+                        <option value="美洲">美洲</option>
+                        <option value="非洲">非洲</option>
+                        <option value="大洋洲">大洋洲</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>国家 / 地区</label>
+                    <input type="text" id="mLocation" required placeholder="如：中国 西藏 / 美国 华盛顿州">
+                </div>
+                <div class="form-group">
+                    <label>海拔高度 (米)</label>
+                    <input type="number" id="mAltitude" required placeholder="如：7782">
+                </div>
+                <div class="form-group">
+                    <label>图片链接 (URL)</label>
+                    <input type="url" id="mImage" required placeholder="可粘贴 Unsplash 图片链接或留空使用默认图">
+                </div>
+                <div class="form-group">
+                    <label>简短介绍 / 旅行亮点</label>
+                    <textarea id="mDesc" rows="3" required placeholder="描写一下这座山的壮丽或你的攀登感受..."></textarea>
+                </div>
+                <button type="submit" class="add-btn" style="width: 100%; margin-top: 10px;">发布到列表</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2026 峰境无界 - Explore the Majestic Mountains Worldwide</p>
+    </footer>
+
+    <!-- 数据与逻辑脚本 -->
+    <script>
+        // 预设全球经典山峰数据
+        let mountains = [
+            {
+                id: 1,
+                name: "珠穆朗玛峰 (Mount Everest)",
+                continent: "亚洲",
+                location: "中国 / 尼泊尔",
+                altitude: 8848.86,
+                image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80",
+                desc: "世界第一高峰，喜马拉雅山脉的王者，无数登山者心中的终极圣殿。",
+                season: "4月 - 5月 (春季攀登季)"
+            },
+            {
+                id: 2,
+                name: "马特洪峰 (Matterhorn)",
+                continent: "欧洲",
+                location: "瑞士 / 意大利",
+                altitude: 4478,
+                image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=800&q=80",
+                desc: "阿尔卑斯山脉最具辨识度的金字塔形山峰，也是瑞士三角巧克力的标志原型。",
+                season: "7月 - 9月 (最佳徒步与观赏期)"
+            },
+            {
+                id: 3,
+                name: "乞力马扎罗山 (Kilimanjaro)",
+                continent: "非洲",
+                location: "坦桑尼亚",
+                altitude: 5895,
+                image: "https://images.unsplash.com/photo-1650668301292-349f7ba30438?auto=format&fit=crop&w=800&q=80",
+                desc: "“非洲屋脊”，赤道旁常年覆雪的独立火山体，无需专业登山技能即可攀登的七大洲最高峰之一。",
+                season: "1月 - 3月 / 6月 - 10月"
+            },
+            {
+                id: 4,
+                name: "菲茨罗伊峰 (Monte Fitz Roy)",
+                continent: "美洲",
+                location: "阿根廷 巴塔哥尼亚",
+                altitude: 3405,
+                image: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=800&q=80",
+                desc: "巴塔哥尼亚的标志性花岗岩锯齿巨峰，户外品牌 Patagonia 的 Logo 原型。",
+                season: "11月 - 次年3月 (南半球夏季)"
+            },
+            {
+                id: 5,
+                name: "富士山 (Mount Fuji)",
+                continent: "亚洲",
+                location: "日本 静冈 / 山梨",
+                altitude: 3776,
+                image: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=800&q=80",
+                desc: "日本的象征，完美的对称圆锥形火山体，被列入世界文化遗产名录。",
+                season: "7月上旬 - 9月上旬 (官方开山期)"
+            },
+            {
+                id: 6,
+                name: "库克山 (Aoraki / Mount Cook)",
+                continent: "大洋洲",
+                location: "新西兰 南岛",
+                altitude: 3724,
+                image: "https://images.unsplash.com/photo-1589802829985-817e51171b92?auto=format&fit=crop&w=800&q=80",
+                desc: "新西兰最高峰，周围环绕着壮丽的塔斯曼冰川与南阿尔卑斯群山，徒步者的天堂。",
+                season: "12月 - 次年2月"
+            }
+        ];
+
+        let currentContinent = 'All';
+        let currentSearch = '';
+
+        // 渲染山峰列表
+        function renderMountains() {
+            const grid = document.getElementById('mountainGrid');
+            grid.innerHTML = '';
+
+            const filtered = mountains.filter(m => {
+                const matchContinent = currentContinent === 'All' || m.continent === currentContinent;
+                const matchSearch = m.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                                    m.location.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                                    m.desc.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchContinent && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #a0aec0;">
+                    <h3>没有找到匹配的山峰</h3>
+                    <p>尝试更换搜索词，或者点击右上角分享添加它！</p>
+                </div>`;
+                return;
+            }
+
+            filtered.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'mountain-card';
+                card.onclick = () => openDetailModal(m.id);
+                card.innerHTML = `
+                    <div class="card-img-wrapper">
+                        <img src="${m.image}" alt="${m.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'">
+                        <span class="card-tag">${m.continent}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${m.name}</h3>
+                        <div class="card-meta">📍 ${m.location}</div>
+                        <p class="card-desc">${m.desc}</p>
+                        <div class="card-footer">
+                            <span>海拔高度</span>
+                            <span class="altitude-badge">${m.altitude.toLocaleString()} 米</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 大洲筛选
+        function filterByContinent(continent) {
+            currentContinent = continent;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(continent) || (continent === 'All' && btn.textContent === '全部'));
+            });
+            renderMountains();
+        }
+
+        // 搜索处理
+        function handleSearch() {
+            currentSearch = document.getElementById('searchInput').value;
+            renderMountains();
+        }
+
+        // 打开详情弹窗
+        function openDetailModal(id) {
+            const m = mountains.find(item => item.id === id);
+            if (!m) return;
+
+            const detailBody = document.getElementById('detailBody');
+            detailBody.innerHTML = `
+                <img src="${m.image}" style="width: 100%; height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 20px;">
+                <h2 style="color: var(--primary-color); margin-bottom: 10px;">${m.name}</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">📍 ${m.location} · 🏷️ ${m.continent}</p>
+                <div style="background: #edf2f7; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-around;">
+                    <div><strong>海拔：</strong> <span style="color:#c53030;">${m.altitude.toLocaleString()} m</span></div>
+                    <div><strong>推荐季节：</strong> <span>${m.season || '全年适宜'}</span></div>
+                </div>
+                <p style="line-height: 1.8; color: #4a5568;">${m.desc}</p>
+            `;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // 打开添加弹窗
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        // 关闭所有弹窗
+        function closeModals() {
+            document.getElementById('detailModal').style.display = 'none';
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        // 处理用户添加山峰
+        function handleAddMountain(e) {
+            e.preventDefault();
+            const newMountain = {
+                id: Date.now(),
+                name: document.getElementById('mName').value,
+                continent: document.getElementById('mContinent').value,
+                location: document.getElementById('mLocation').value,
+                altitude: parseFloat(document.getElementById('mAltitude').value),
+                image: document.getElementById('mImage').value || 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+                desc: document.getElementById('mDesc').value,
+                season: "徒步/攀登爱好推荐"
+            };
+
+            mountains.unshift(newMountain);
+            document.getElementById('addMountainForm').reset();
+            closeModals();
+            renderMountains();
+        }
+
+        // 点击遮罩层关闭
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeModals();
+            }
+        };
+
+        // 初始化加载
+        renderMountains();
+    </script>
+</body>
+</html>
